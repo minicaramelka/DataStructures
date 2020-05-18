@@ -1,9 +1,14 @@
 #pragma once
 
 // стратегия изменения capacity
-enum class ResizeStrategy {
+enum class ResizeStrategy{
 	Additive,
 	Multiplicative
+};
+
+enum class SortedStrategy{
+    Up,
+    Down
 };
 
 // тип значений в векторе
@@ -18,7 +23,10 @@ public:
 	
 	MyVector(const MyVector& copy);
 	MyVector& operator=(const MyVector& copy);
-
+	
+	ValueType* begin();
+	ValueType* end();
+	
 	~MyVector();
 
 	// для умненьких — реализовать конструктор и оператор для перемещения
@@ -26,15 +34,17 @@ public:
 	size_t capacity() const;
 	size_t size() const;
 	float loadFactor();
+	size_t loadFactorForResizeMore();
+	size_t loadFactorForResizeFew();
 
 	// доступ к элементу, 
 	// должен работать за O(1)
-	ValueType& operator[](const size_t i);
-	const ValueType& operator[](const size_t i) const;
+	ValueType& operator[](const size_t i) const;
 
 	// добавить в конец,
 	// должен работать за amort(O(1))
 	void pushBack(const ValueType& value);
+	
 	// вставить,
 	// должен работать за O(n)
 	void insert(const size_t i, const ValueType& value);	// версия для одного значения
@@ -43,6 +53,7 @@ public:
 	// удалить с конца,
 	// должен работать за amort(O(1))
 	void popBack();
+
 	// удалить
 	// должен работать за O(n)
 	void erase(const size_t i);
@@ -55,18 +66,23 @@ public:
 	long long int find(const ValueType& value, bool isBegin = true) const;	
 
 	// зарезервировать память (принудительно задать capacity)
-	void reserve(const size_t capacity);
+	void reserve(const size_t capacity);                                                                        
 
 	// изменить размер
 	// если новый размер больше текущего, то новые элементы забиваются дефолтными значениями
 	// если меньше - обрезаем вектор
-	void resize(const size_t size, const ValueType = 0.0);
+	void resize(const size_t size, const ValueType value = 0.0);                                                      
 
-	// очистка вектора, без изменения capacity
-	void clear();
+	// очистка вектора, без изменения capacity                                                              
+	void clear();   
+
 private:
 	ValueType* _data;
 	size_t _size;
 	size_t _capacity;
+	float _coef;
+	ResizeStrategy _str;
+	size_t _delta;
 };
 
+MyVector sortedSquares(const MyVector& vec, SortedStrategy strategy);
