@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 // Уровень абстракции
 // клиентский код подключает именно этот хедер
 
@@ -21,15 +22,14 @@ public:
 	// Большая пятерка
 	Stack(StackContainer container = StackContainer::Vector);
 	// элементы массива последовательно подкладываются в стек
-	Stack(const ValueType* valueArray, const size_t arraySize, 
-		  StackContainer container = StackContainer::Vector);
+	Stack(const ValueType* valueArray, const size_t arraySize, StackContainer container = StackContainer::Vector);
 
-	explicit Stack(const Stack& copyStack);
+	Stack(const Stack& copyStack);
 	Stack& operator=(const Stack& copyStack);
 
 	// Здесь как обычно
-	// Stack(Stack&& moveStack) noexcept;
-	// Stack& operator=(Stack&& moveStack) noexcept;
+	 Stack(Stack&& moveStack) noexcept;
+	 Stack& operator=(Stack&& moveStack) noexcept;
 
 	~Stack();
 
@@ -38,7 +38,6 @@ public:
 	// удаление с хвоста
 	void pop();
 	// посмотреть элемент в хвосте
-	ValueType& top();
 	const ValueType& top() const;
 	// проверка на пустоту
 	bool isEmpty() const;
