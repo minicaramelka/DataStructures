@@ -13,6 +13,9 @@ MyVector::MyVector(size_t size, ResizeStrategy ResizeStrategy, float coef) {
 		_delta = coef;
 		_capacity = _size + _delta;
 		_data = new ValueType[_capacity];
+		for (int i = 0; i < _size; i++) {
+			_data[i] = ValueType();
+		}
 	}
 	if (_str == ResizeStrategy::Multiplicative) {
 		_coef = coef;
@@ -20,6 +23,9 @@ MyVector::MyVector(size_t size, ResizeStrategy ResizeStrategy, float coef) {
 			_capacity = _size * _coef;
 		}
 		_data = new ValueType[_capacity];
+		for (int i = 0; i < _size; i++) {
+			_data[i] = ValueType();
+		}
 	}
 }
 
@@ -257,52 +263,54 @@ size_t MyVector::loadFactorForResizeFew() {
 }
 
 void MyVector::resize(const size_t size, const ValueType value) {
-	if (_str == ResizeStrategy::Multiplicative) {
-		if (_size == 0) {
-			_size = size;
+	if (_size == 0) {
+		_size = size;
+		if (_str == ResizeStrategy::Multiplicative)
 			_capacity = _size * _coef;
+		else
+			_capacity = _size + _coef;
+		delete[] _data;
+		_data = nullptr;
+		_data = new ValueType[_capacity];
+		for (int i = 0; i < _size; i++)
+		{
+			_data[i] = value;
+		}
+	}
+	else {
+		ValueType* bufArray = new ValueType[size];
+		if (size > _size) {
+			for (int i = 0; i < _size; i++) {
+				bufArray[i] = _data[i];
+			}
+			for (int j = _size; j < size; j++) {
+				bufArray[j] = value;
+			}
 			delete[] _data;
 			_data = nullptr;
+			_size = size;
+			loadFactorForResizeMore();
 			_data = new ValueType[_capacity];
-			for (int i = 0; i < _size; i++) {
-				_data[i] = value;
+			for (int k = 0; k < size; k++) {
+				_data[k] = bufArray[k];
 			}
+			delete[] bufArray;
+			bufArray = nullptr;
 		}
 		else {
-			ValueType* bufArray = new ValueType[size];
-			if (size > _size) {
-				for (int i = 0; i < _size; i++) {
-					bufArray[i] = _data[i];
-				}
-				for (int j = _size; j < size; j++) {
-					bufArray[j] = value;
-				}
-				delete[] _data;
-				_data = nullptr;
-				_size = size;
-				loadFactorForResizeMore();
-				_data = new ValueType[_capacity];
-				for (int k = 0; k < size; k++) {
-					_data[k] = bufArray[k];
-				}
-				delete[] bufArray;
-				bufArray = nullptr;
+			for (int i = 0; i < size; i++) {
+				bufArray[i] = _data[i];
 			}
-			else {
-				for (int i = 0; i < size; i++) {
-					bufArray[i] = _data[i];
-				}
-				delete[] _data;
-				_data = nullptr;
-				_size = size;
-				loadFactorForResizeFew();
-				_data = new ValueType[_capacity];
-				for (int k = 0; k < size; k++) {
-					_data[k] = bufArray[k];
-				}
-				delete[] bufArray;
-				bufArray = nullptr;
+			delete[] _data;
+			_data = nullptr;
+			_size = size;
+			loadFactorForResizeFew();
+			_data = new ValueType[_capacity];
+			for (int k = 0; k < size; k++) {
+				_data[k] = bufArray[k];
 			}
+			delete[] bufArray;
+			bufArray = nullptr;
 		}
 	}
 }

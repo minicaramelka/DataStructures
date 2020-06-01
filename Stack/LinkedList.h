@@ -33,7 +33,7 @@ public:
 	LinkedList& operator=(LinkedList&& moveList) noexcept; //+
 	~LinkedList(); //+
 
-	////
+				   ////
 
 	// доступ к значению элемента по индексу
 	ValueType& operator[](const size_t pos) const; //+

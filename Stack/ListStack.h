@@ -1,5 +1,5 @@
 #pragma once
-
+#include<cstdlib>
 #include"LinkedList.h"
 #include "StackImplementation.h"
  // меняете на include вашего листа
@@ -9,14 +9,16 @@
 // множественное наследование можно заменить на композицию
 class ListStack : public StackImplementation, public LinkedList
 {
-
+	public:
+	ListStack() {};
 	void push(const ValueType& value);
 	// удаление с хвоста
 	void pop();
 	// посмотреть элемент в хвосте
 	const ValueType& top() const;
 	// проверка на пустоту
-	bool isEmptyStack() const;
+	bool isEmpty() const;
 	// размер 
-	size_t sizeStack() const;
+	size_t size() const;
+	~ListStack() {};
 };

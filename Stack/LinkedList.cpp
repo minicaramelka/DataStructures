@@ -52,9 +52,9 @@ LinkedList& LinkedList::operator=(const LinkedList& copyList) {
 	if (this == &copyList) {
 		return *this;
 	}
-	LinkedList bufList(copyList);
-	this->_size = bufList._size;
-	this->_head = bufList._head;
+	LinkedList* bufList = new LinkedList(copyList);
+	this->_size = bufList->_size;
+	this->_head = bufList->_head;
 	return *this;
 }
 
@@ -174,6 +174,7 @@ void LinkedList::removeNextNode(Node* node) {
 	Node* removeNode = node->next;
 	node->next = node->next->next;
 	delete removeNode;
+	removeNode = nullptr;
 	_size--;
 }
 
@@ -213,7 +214,7 @@ long long int LinkedList::findIndex(const ValueType& value) const {
 		if (tmp->value == value) {
 			j = i;
 			i = _size;
-			return j;
+			return j - 1;
 		}
 		tmp = tmp->next;
 	}

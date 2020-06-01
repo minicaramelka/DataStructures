@@ -62,7 +62,7 @@ Stack::Stack(const Stack& copyStack)
 
 Stack& Stack::operator=(const Stack& copyStack) {
     int copySize = copyStack.size();
-	delete _pimpl;
+		delete _pimpl;
     if(copyStack._containerType == StackContainer::List) {
         _pimpl = new ListStack();// конкретизируйте под ваши конструкторы, если надо
     }
@@ -106,10 +106,10 @@ const ValueType& Stack::top() const
 
 bool Stack::isEmpty() const
 {
-	return _pimpl->isEmptyStack();
+	return _pimpl->isEmpty();
 }
 
 size_t Stack::size() const
 {
-	return _pimpl->sizeStack();
+	return _pimpl->size();
 }

@@ -15,9 +15,9 @@ public:
 	// посмотреть элемент в хвосте
 	virtual const ValueType& top() const = 0;
 	// проверка на пустоту
-	virtual bool isEmptyStack() const = 0;
+	virtual bool isEmpty() const = 0;
 	// размер 
-	virtual size_t sizeStack() const = 0;
+	virtual size_t size() const = 0;
 	// виртуальный деструктор
-	~StackImplementation() {};
+	virtual ~StackImplementation() {};
 };
