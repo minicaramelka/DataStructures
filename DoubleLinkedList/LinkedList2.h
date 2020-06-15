@@ -1,9 +1,9 @@
 #pragma once
-
+#include <cstddef>
 // потом поменяем на шаблоны
 using ValueType = double;
 
-class LinkedList2{
+class LinkedList2 {
 
 	// класс узла списка
 	// по своей сути, может содержать любые данные,
@@ -35,7 +35,7 @@ public:
 
 	~LinkedList2(); //+
 
-	////
+					////
 
 	// доступ к значению элемента по индексу
 	ValueType& operator[](const size_t pos) const; //+
@@ -59,8 +59,8 @@ public:
 	// удаление
 	void remove(const size_t pos); //+
 	void removeNextNode(Node* node);
-	void removeFront(); 
-	void removeBack();  
+	void removeFront();
+	void removeBack();
 
 	// поиск, О(n)
 	long long int findIndex(const ValueType& value) const;
@@ -79,5 +79,5 @@ private:
 	size_t	_size;
 
 	void forceNodeDelete(Node* node); //+
-	
+
 };
