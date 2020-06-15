@@ -10,12 +10,13 @@
 class VectorQueue : public QueueImplementation, public MyVector
 {
 	public:
-	VectorQueue();
-	void pushQueue(const ValueType& value);
-	void popQueue();
-	const ValueType& top() const;
-	bool isEmptyQueue() const;
-	size_t sizeQueue() const;
-	~VectorQueue();
-	
+		VectorQueue() {};
+		VectorQueue(const VectorQueue& copy)
+			:MyVector(copy) {};
+		void pushQueue(const ValueType& value);
+		void popQueue();
+		const ValueType& top() const;
+		bool isEmptyQueue() const;
+		size_t sizeQueue() const;
+		~VectorQueue() {};
 };

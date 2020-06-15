@@ -1,6 +1,7 @@
 #include <iostream>
 #include "LinkedList.h"
 #include <cassert>
+#include <stdexcept>
 
 using namespace std;
 
@@ -33,14 +34,14 @@ LinkedList::LinkedList() :
 
 LinkedList::LinkedList(const LinkedList& copyList)
 {
-	_size = copyList._size;
+	this->_size = copyList._size;
 	if (_size == 0) {
 		_head = nullptr;
 		return;
 	}
 	_head = new Node(copyList._head->value);
-	Node* currentNode = _head;
 	Node* currentCopyNode = copyList._head;
+	Node* currentNode = _head;
 	while (currentCopyNode->next) {
 		currentCopyNode = currentCopyNode->next;
 		currentNode->next = new Node(currentCopyNode->value);
@@ -52,9 +53,10 @@ LinkedList& LinkedList::operator=(const LinkedList& copyList) {
 	if (this == &copyList) {
 		return *this;
 	}
-	LinkedList bufList(copyList);
-	this->_size = bufList._size;
-	this->_head = bufList._head;
+	LinkedList* bufList = new LinkedList(copyList);
+	forceNodeDelete(_head);
+	this->_size = bufList->_size;
+	this->_head = bufList->_head;
 	return *this;
 }
 
@@ -87,10 +89,10 @@ ValueType& LinkedList::operator[](const size_t pos) const {
 
 LinkedList::Node* LinkedList::getNode(const size_t pos) const {
 	if (pos < 0) {
-		assert(pos < 0);
+		throw out_of_range("pos < 0");
 	}
 	else if (pos >= this->_size) {
-		assert(pos >= this->_size);
+		throw out_of_range("pos >= size");
 	}
 	Node* bufNode = this->_head;
 	for (int i = 0; i < pos; ++i) {
@@ -101,10 +103,10 @@ LinkedList::Node* LinkedList::getNode(const size_t pos) const {
 
 void LinkedList::insert(const size_t pos, const ValueType& value) {
 	if (pos < 0) {
-		assert(pos < 0);
+		throw out_of_range("pos < 0");
 	}
 	else if (pos > this->_size) {
-		assert(pos > this->_size);
+		throw out_of_range("pos > size");
 	}
 	if (pos == 0) {
 		pushFront(value);
@@ -164,7 +166,7 @@ void LinkedList::remove(const size_t pos) {
 		}
 	}
 	else
-		cout << "The list is empty!" << endl;
+		throw out_of_range("The list is empty!");
 }
 
 void LinkedList::removeNextNode(Node* node) {
@@ -174,6 +176,7 @@ void LinkedList::removeNextNode(Node* node) {
 	Node* removeNode = node->next;
 	node->next = node->next->next;
 	delete removeNode;
+	removeNode = nullptr;
 	_size--;
 }
 
@@ -186,7 +189,7 @@ void LinkedList::removeFront() {
 		_head = tmp;
 	}
 	else
-		cout << "The list is empty!" << endl;
+		throw out_of_range("The list is empty!");
 }
 
 void LinkedList::removeBack() {
@@ -202,6 +205,32 @@ void LinkedList::removeBack() {
 		delete tmp;
 		_size--;
 	}
+	/*if (_head){
+		if (_size >= 2){
+			/* Node *tmp = _head;
+			Node *nd = _head;
+			while(tmp->next!=nullptr)
+			{
+			nd = tmp;
+			tmp = tmp->next;
+			}
+			nd->next = nullptr;
+			delete tmp;
+			_size--;
+			Node* tmp = getNode(_size - 2);
+			delete tmp->next;
+			tmp->next = nullptr;
+			_size--;
+		}
+		else if (_size == 1)
+		{
+			delete _head;
+			_head = nullptr;
+			_size--;
+		}
+	}*/
+	else
+		throw out_of_range("The list is empty!");
 }
 
 long long int LinkedList::findIndex(const ValueType& value) const {
@@ -213,7 +242,7 @@ long long int LinkedList::findIndex(const ValueType& value) const {
 		if (tmp->value == value) {
 			j = i;
 			i = _size;
-			return j;
+			return j - 1;
 		}
 		tmp = tmp->next;
 	}

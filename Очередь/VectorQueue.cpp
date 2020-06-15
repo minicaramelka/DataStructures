@@ -1,13 +1,11 @@
 #include "VectorQueue.h"
 
-VectorQueue::VectorQueue() {}
-
 void VectorQueue::pushQueue(const ValueType& value) {
 	pushBack(value);
 }
 
 void VectorQueue::popQueue() {
-	remove(0);
+	erase(0);
 }
 
 const ValueType& VectorQueue::top() const {
@@ -21,8 +19,5 @@ bool VectorQueue::isEmptyQueue() const {
 }
 
 size_t VectorQueue::sizeQueue() const {
-	return this->size();
+	return MyVector::size();
 }
-
-VectorQueue::~VectorQueue() {}
-

@@ -9,14 +9,18 @@
 // множественное наследование можно заменить на композицию
 class List2Queue : public QueueImplementation, public LinkedList2
 {
-
-	void pushQueue(const ValueType& value);
-	// удаление с хвоста
-	void popQueue();
-	// посмотреть элемент в хвосте
-	const ValueType& top() const;
-	// проверка на пустоту
-	bool isEmptyQueue() const;
-	// размер 
-	size_t sizeQueue() const;
+	public:
+		List2Queue() {};
+		List2Queue(const List2Queue& copy)
+			:LinkedList2(copy) {};
+		void pushQueue(const ValueType& value);
+		// удаление с хвоста
+		void popQueue();
+		// посмотреть элемент в хвосте
+		const ValueType& top() const;
+		// проверка на пустоту
+		bool isEmptyQueue() const;
+		// размер 
+		size_t sizeQueue() const;
+		~List2Queue() {};
 };

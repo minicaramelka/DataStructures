@@ -9,8 +9,8 @@ using ValueType = double;
 // на основе какого контейнера работает стек
 enum class QueueContainer {
 	Vector = 0,
-	List,
-	List2,
+	SinglyLinkedList,
+	DoublyLinkedList,
 	// можно дополнять другими контейнерами
 };
 
@@ -29,17 +29,17 @@ public:
 	Queue& operator=(const Queue& copyQueue);
 
 	// Здесь как обычно
-	Queue(Queue&& moveQueue) noexcept;
-	Queue& operator=(Queue&& moveQueue) noexcept;
+	//Queue(Queue&& moveQueue) noexcept;
+	//Queue& operator=(Queue&& moveQueue) noexcept;
 
 	~Queue();
 
 	// добавление в хвост
-	void push(const ValueType& value);
+	void enqueue(const ValueType& value);
 	// удаление с хвоста
-	void pop();
+	void dequeue();
 	// посмотреть элемент в хвосте
-	const ValueType& top() const;
+	const ValueType& front() const;
 	// проверка на пустоту
 	bool isEmpty() const;
 	// размер 
