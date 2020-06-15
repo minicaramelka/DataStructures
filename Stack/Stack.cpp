@@ -61,26 +61,25 @@ Stack::Stack(const Stack& copyStack)
 }
 
 Stack& Stack::operator=(const Stack& copyStack) {
-    int copySize = copyStack.size();
-		delete _pimpl;
-    if(copyStack._containerType == StackContainer::List) {
-        _pimpl = new ListStack();// конкретизируйте под ваши конструкторы, если надо
-    }
-    if(copyStack._containerType == StackContainer::Vector) {
-        _pimpl = new VectorStack();    // конкретизируйте под ваши конструкторы, если надо
-    }
-    ValueType* array = new ValueType[copySize];
-    for (int i = copySize - 1; i >= 0; i--) {
-        array[i] = copyStack._pimpl->top();
-        copyStack._pimpl->pop();
-    }
-    for (int i = 0; i < copySize; i++) {
-        _pimpl->push(array[i]);
-        copyStack._pimpl->push(array[i]);
-    }
-    delete[] array;
-    return *this;
-    // TODO: вставьте здесь оператор return
+	if (this == &copyStack) {
+		return *this;
+	}
+	delete _pimpl;
+	_containerType = copyStack._containerType;
+	switch (_containerType){
+		case StackContainer::List: {
+			_pimpl = new ListStack(*(static_cast<ListStack*>(copyStack._pimpl)));// конкретизируйте под ваши конструкторы, если надо
+			break;
+		}
+		case StackContainer::Vector: {
+			_pimpl = new VectorStack(*(static_cast<VectorStack*>(copyStack._pimpl)));// конкретизируйте под ваши конструкторы, если надо
+			break;
+		}
+		default:
+			throw std::runtime_error("Неизвестный тип контейнера");
+	}
+	return *this;
+	// TODO: вставьте здесь оператор return
 }
 
 Stack::~Stack()

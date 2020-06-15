@@ -1,6 +1,7 @@
 #include <iostream>
 #include "LinkedList.h"
 #include <cassert>
+#include <stdexcept>
 
 using namespace std;
 
@@ -87,10 +88,10 @@ ValueType& LinkedList::operator[](const size_t pos) const {
 
 LinkedList::Node* LinkedList::getNode(const size_t pos) const {
 	if (pos < 0) {
-		assert(pos < 0);
+		throw out_of_range("pos < 0");
 	}
 	else if (pos >= this->_size) {
-		assert(pos >= this->_size);
+		throw out_of_range("pos >= size");
 	}
 	Node* bufNode = this->_head;
 	for (int i = 0; i < pos; ++i) {
@@ -101,10 +102,10 @@ LinkedList::Node* LinkedList::getNode(const size_t pos) const {
 
 void LinkedList::insert(const size_t pos, const ValueType& value) {
 	if (pos < 0) {
-		assert(pos < 0);
+		throw out_of_range("pos < 0");
 	}
 	else if (pos > this->_size) {
-		assert(pos > this->_size);
+		throw out_of_range("pos > size");
 	}
 	if (pos == 0) {
 		pushFront(value);
@@ -164,7 +165,7 @@ void LinkedList::remove(const size_t pos) {
 		}
 	}
 	else
-		cout << "The list is empty!" << endl;
+		throw out_of_range("The list is empty!");
 }
 
 void LinkedList::removeNextNode(Node* node) {
@@ -187,7 +188,7 @@ void LinkedList::removeFront() {
 		_head = tmp;
 	}
 	else
-		cout << "The list is empty!" << endl;
+		throw out_of_range("The list is empty!");
 }
 
 void LinkedList::removeBack() {
@@ -203,6 +204,8 @@ void LinkedList::removeBack() {
 		delete tmp;
 		_size--;
 	}
+	else
+		throw out_of_range("The list is empty!");
 }
 
 long long int LinkedList::findIndex(const ValueType& value) const {

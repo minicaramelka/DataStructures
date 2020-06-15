@@ -1,6 +1,8 @@
 #include <iostream>
 #include "MyVector.h"
 #include <algorithm>
+#include <cmath>
+#include <stdexcept>
 
 using namespace std;
 
@@ -70,20 +72,25 @@ MyVector::~MyVector() {
 }
 
 MyVector& MyVector::operator=(const MyVector& copy) {
-	_size = copy._size;
-	_capacity = copy._capacity;
-	_str = copy._str;
-	if (_str == ResizeStrategy::Additive) {
-		_delta = copy._delta;
+	if (this != &copy) {
+		_size = copy._size;
+		_capacity = copy._capacity;
+		_str = copy._str;
+		if (_str == ResizeStrategy::Additive) {
+			_delta = copy._delta;
+		}
+		if (_str == ResizeStrategy::Multiplicative) {
+			_coef = copy._coef;
+		}
+		delete[] _data;
+		_data = new ValueType[_capacity];
+		for (int i = 0; i < _size; i++) {
+			_data[i] = copy._data[i];
+		}
+		return *this;
 	}
-	if (_str == ResizeStrategy::Multiplicative) {
-		_coef = copy._coef;
-	}
-	_data = new ValueType[_capacity];
-	for (int i = 0; i < _size; i++) {
-		_data[i] = copy._data[i];
-	}
-	return *this;
+	else
+		return *this;
 }
 
 ValueType& MyVector::operator[](const size_t i) const {
@@ -103,7 +110,8 @@ float MyVector::loadFactor() {
 }
 
 void MyVector::pushBack(const ValueType& value) {
-	if (_capacity > _size) {
+
+	if (_size + 1 <= _capacity) {
 		_size++;
 		_data[_size - 1] = value;
 	}
@@ -111,6 +119,15 @@ void MyVector::pushBack(const ValueType& value) {
 		resize(_size + 1);
 		_data[_size - 1] = value;
 	}
+	/*
+	if (_capacity > _size) {
+	_size++;
+	_data[_size - 1] = value;
+	}
+	else {
+	resize(_size + 1);
+	_data[_size - 1] = value;
+	}*/
 }
 
 void MyVector::popBack() {
@@ -126,6 +143,8 @@ void MyVector::popBack() {
 			}
 		}
 	}
+	else
+		throw out_of_range("size < 0");
 }
 
 void MyVector::insert(const size_t i, const ValueType& value) {
@@ -219,8 +238,7 @@ void MyVector::reserve(const size_t capacity) {
 	_data = nullptr;
 	_data = new ValueType[_capacity];
 	if (_capacity < _size) {
-		for (int j = 0; j < _capacity; j++)
-		{
+		for (int j = 0; j < _capacity; j++) {
 			_data[j] = bufArray[j];
 		}
 		_size = _capacity;
@@ -242,7 +260,7 @@ size_t MyVector::loadFactorForResizeMore() {
 	}
 	if (_str == ResizeStrategy::Multiplicative) {
 		while (loadFactor() > 1) {
-			_capacity = _capacity * _coef;
+			_capacity = ceil((float)_capacity * (float)_coef);
 		}
 	}
 	return _capacity;
@@ -272,8 +290,7 @@ void MyVector::resize(const size_t size, const ValueType value) {
 		delete[] _data;
 		_data = nullptr;
 		_data = new ValueType[_capacity];
-		for (int i = 0; i < _size; i++)
-		{
+		for (int i = 0; i < _size; i++) {
 			_data[i] = value;
 		}
 	}
@@ -329,6 +346,8 @@ void MyVector::erase(const size_t i) {
 	}
 	delete[] bufArray;
 	bufArray = nullptr;
+	if (_capacity == 0)
+		reserve(1);
 }
 
 void MyVector::erase(const size_t i, const size_t len) {
@@ -347,6 +366,8 @@ void MyVector::erase(const size_t i, const size_t len) {
 	}
 	delete[] bufArray;
 	bufArray = nullptr;
+	if (_capacity == 0)
+		reserve(1);
 }
 
 void MyVector::clear() {
@@ -374,7 +395,6 @@ long long int MyVector::find(const ValueType& value, bool isBegin) const {
 			}
 		}
 	}
-
 	if (isBegin == false) {
 		for (int i = _size; i > 0; --i) {
 			if (_data[i] == value) {

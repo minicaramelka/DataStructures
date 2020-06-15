@@ -1,19 +1,19 @@
 #include "VectorStack.h"
 
 void VectorStack::push(const ValueType& value) {
-	MyVector::pushBack(value);
+	this->MyVector::pushBack(value);
 }
 
 void VectorStack::pop() {
-	MyVector::popBack();
+	this->MyVector::popBack();
 }
 
 const ValueType& VectorStack::top() const {
-	return (*this)[MyVector::size() - 1];
+	return (*this)[this->MyVector::size() - 1];
 }
 
 bool VectorStack::isEmpty() const {
-	if (MyVector::size() == 0)
+	if (this->MyVector::size() == 0)
 		return true;
 	return false;
 }

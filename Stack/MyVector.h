@@ -82,7 +82,7 @@ private:
 	size_t _capacity;
 	float _coef;
 	ResizeStrategy _str;
-	size_t _delta;
+	float _delta;
 };
 
 MyVector sortedSquares(const MyVector& vec, SortedStrategy strategy);

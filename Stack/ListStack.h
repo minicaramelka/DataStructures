@@ -11,14 +11,14 @@ class ListStack : public StackImplementation, public LinkedList
 {
 	public:
 	ListStack() {};
-	void push(const ValueType& value);
+	void push(const ValueType& value) ;
 	// удаление с хвоста
-	void pop();
+	void pop() ;
 	// посмотреть элемент в хвосте
-	const ValueType& top() const;
+	const ValueType& top() const ;
 	// проверка на пустоту
-	bool isEmpty() const;
+	bool isEmpty() const ;
 	// размер 
-	size_t size() const;
+	size_t size() const ;
 	~ListStack() {};
 };
